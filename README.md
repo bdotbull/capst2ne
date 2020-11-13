@@ -1,1 +1,2 @@
-# capst2ne
+# Placeholder Repo for Capstone 2
+## [Proposals]()
