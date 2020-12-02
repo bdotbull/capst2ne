@@ -1,20 +1,3 @@
-
-"""
-import torch
-
-# setting device on GPU if available, else CPU
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print('Using device:', device)
-print()
-
-#Additional Info when using cuda
-if device.type == 'cuda':
-    print(torch.cuda.get_device_name(0))
-    print('Memory Usage:')
-    print('Allocated:', round(torch.cuda.memory_allocated(0)/1024**3,1), 'GB')
-    print('Cached:   ', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
-"""
-
 import time
 import os
 import sys
@@ -29,7 +12,7 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D
 from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.python.keras.engine.sequential import Sequential
 
-
+"""
 #### Come back to this block for CapsTHREE if still using TF
 def pre_process():
     pass
@@ -43,7 +26,8 @@ dataset = dataset.batch(batch_size=32)
 dataset = dataset.prefetch()  # not sure if necessary.  Files are ~1.0mb-2.0mb
                               # this would be great for files 10mb-100mb
 #### Come back to this block for CapsTHREE if still using TF
-
+"""
+'''
 # DATA LOADER
 # TODO: set up Data directory files to have dominus, fennec, 
 #       and octane as the top level
@@ -53,7 +37,15 @@ data_dir = pathlib.Path('../data/img/')
 dominus = list(data_dir.glob('dominus/*'))
 fennec = list(data_dir.glob('fennec/*'))
 octane = list(data_dir.glob('octane/*'))
+'''
 
+# DATA LOADER
+# for initial testing, using the greybox images
+data_dir = pathlib.Path('../data/img/screenshots/grey_env/')
+# Set up 3 classes
+dominus = list(data_dir.glob('dom/*'))
+fennec = list(data_dir.glob('fen/*'))
+octane = list(data_dir.glob('oct/*'))
 
 # LOADER PARAMETERS
 batch_size = 32
@@ -66,6 +58,7 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     data_dir,
     validation_split=0.2,
     subset="training",
+    seed=327,
     image_size=(img_height, img_width),
     batch_size=batch_size)
 
@@ -91,8 +84,8 @@ for dense_layer in dense_layers:
     for layer_size in layer_sizes:
         for conv_layer in conv_layers:
             NAME = "{}-conv-{}-nodes-{}-dense-{}".format(
-                conv_layer, layer_size, dense_layer, int(time.tim()))
-            tensorboard = TensorBoard(log_dir=f'logs/{int(time.time())}')
+                conv_layer, layer_size, dense_layer, int(time.time()))
+            tensorboard = TensorBoard(log_dir=f'../logs/{NAME}')
             print(NAME)
             model = Sequential()
 
@@ -123,7 +116,7 @@ for dense_layer in dense_layers:
                 metrics=['accuracy']
             )
 
-            history = model.fit(
+            model.fit(
                 train_ds,
                 validation_data=val_ds,
                 epochs=epochs,
