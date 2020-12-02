@@ -43,5 +43,5 @@ for dense_layer in dense_layers:
         for conv_layer in conv_layers:
             NAME = "{}-conv-{}-nodes-{}-dense-{}".format(
                 conv_layer, layer_size, dense_layer, int(time.tim()))
-            tensorboard = TensorBoard()
+            tensorboard = TensorBoard(log_dir=f'logs/{int(time.time())}')
             pass
