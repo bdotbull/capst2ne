@@ -45,18 +45,43 @@ dataset = dataset.prefetch()  # not sure if necessary.  Files are ~1.0mb-2.0mb
 #### Come back to this block for CapsTHREE if still using TF
 
 # DATA LOADER
-# TODO: set up Data directory to have dominus, fennec, 
+# TODO: set up Data directory files to have dominus, fennec, 
 #       and octane as the top level
-#data_dir = pathlib.Path('../data/img/')
+data_dir = pathlib.Path('../data/img/')
+
+# Set up classes
+dominus = list(data_dir.glob('dominus/*'))
+fennec = list(data_dir.glob('fennec/*'))
+octane = list(data_dir.glob('octane/*'))
+
 
 # LOADER PARAMETERS
 batch_size = 32
 img_height = 180
 img_width = 180
 
-num_classes = 3  #=len(train_ds.class_names).  Used for last Dense
+# 80% of images used for training, leaving 20% for validation
+# Note: `.image_dataset_from_directory` resizes the images.
+train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+    data_dir,
+    validation_split=0.2,
+    subset="training",
+    image_size=(img_height, img_width),
+    batch_size=batch_size)
+
+# create 20% validation set
+val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+    data_dir,
+    validation_split=0.2,
+    subset="validation",
+    seed=327,
+    image_size=(img_height, img_width),
+    batch_size=batch_size)
+
+num_classes = len(train_ds.class_names)  #Used for last Dense
 
 # Model Bits n Bobs
+epochs = 10
 dense_layers = [1, 2]
 layer_sizes = [32, 64, 128]
 conv_layers = [1, 2, 3]
@@ -77,7 +102,7 @@ for dense_layer in dense_layers:
             model.add(Activation('relu'))
             model.add(MaxPooling2D())  # maybe try 2? pool_size=(2, 2)
 
-            # LOOP range(conv_layer-1) because we have one already
+            # LOOP range(conv_layer-1) because we have one already 
             for l in range(conv_layer-1):
                 model.add(Conv2D(layer_size, 3, padding='same'))
                 model.add(Activation('relu'))
@@ -96,4 +121,11 @@ for dense_layer in dense_layers:
                 optimizer='adam',
                 loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                 metrics=['accuracy']
+            )
+
+            history = model.fit(
+                train_ds,
+                validation_data=val_ds,
+                epochs=epochs,
+                callbacks=[tensorboard]
             )
