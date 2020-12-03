@@ -36,7 +36,7 @@ def crop_one_img(img_path, out_dir='', car='unspecified'):
               1600, 1000)
         croppedImage = img.crop(box)
         filename = img.filename.split('/')[-1]    # get just filename (not path)
-        croppedImage.save(f'{out_dir}/{car}/cropped_{filename}')
+        croppedImage.save(f'{out_dir}{car}/cropped_{filename}')
         #plt.imshow(croppedImage)
     
     except FileNotFoundError:
