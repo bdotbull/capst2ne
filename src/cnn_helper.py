@@ -6,6 +6,7 @@ import PIL
 import matplotlib.pyplot as plt
 #import cv2
 import os
+import numpy as np
 
 
 def crop_one_img(img_path, out_dir='', car='unspecified'):
@@ -90,4 +91,9 @@ def viz_res(history, epochs):
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
     plt.show()
-    
+
+
+def plot_digit_weights(ax, weight, digit, img_height, img_width):
+    """Plot the weights from fit cnn as image."""
+    digit_weigths = np.reshape(weight[:,digit], (img_height, img_width))
+    ax.imshow(digit_weigths, cmap=plt.cm.winter, interpolation="nearest") 
