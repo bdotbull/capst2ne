@@ -27,6 +27,7 @@ dataset = dataset.prefetch()  # not sure if necessary.  Files are ~1.0mb-2.0mb
                               # this would be great for files 10mb-100mb
 #### Come back to this block for CapsTHREE if still using TF
 """
+
 # limit gpu mem usage to 3gb
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
@@ -45,6 +46,7 @@ if gpus:
 # DATA LOADER
 # for initial testing, using the greybox images
 data_dir = pathlib.Path('../data/img/screenshots/train/cropped/')
+
 # Set up classes
 dominus = list(data_dir.glob('dominus/*'))
 fennec = list(data_dir.glob('fennec/*'))
@@ -76,16 +78,18 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(
 
 num_classes = len(train_ds.class_names)  #Used for last Dense
 
+
 # Data Performance Optimization
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
+
 # Model Bits n Bobs
 epochs = 25
 dense_layers = [1, 2]
-layer_sizes = [32, 64, 128]
-conv_layers = [1, 2, 3]
+layer_sizes = [64, 128, 256]
+conv_layers = [3, 4, 5]
 
 # Model Building
 for dense_layer in dense_layers:
@@ -130,3 +134,6 @@ for dense_layer in dense_layers:
                 epochs=epochs,
                 callbacks=[tensorboard]
             )
+
+            # Save entire model in HDF5 format
+            model.save(f'../models/tf/model{int(time.time())}.h5')

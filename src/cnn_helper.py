@@ -4,6 +4,8 @@ CNN helper functions for loading data
 
 import PIL
 import matplotlib.pyplot as plt
+#import cv2
+import os
 
 
 def crop_one_img(img_path, out_dir='', car='unspecified'):
