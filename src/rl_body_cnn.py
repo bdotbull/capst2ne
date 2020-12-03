@@ -74,6 +74,11 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(
     image_size=(img_height, img_width),
     batch_size=batch_size)
 
+# Data Performance Optimization
+AUTOTUNE = tf.data.experimental.AUTOTUNE
+train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
 num_classes = len(train_ds.class_names)  #Used for last Dense
 
 # Model Bits n Bobs
