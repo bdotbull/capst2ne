@@ -61,7 +61,7 @@ def data_loader(input_path, class_names, batch_size=32,
 
     pass
 
-def viz_res(history):
+def viz_res(history, epochs):
     """[summary]
 
     Args:

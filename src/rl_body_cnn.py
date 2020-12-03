@@ -27,9 +27,20 @@ dataset = dataset.prefetch()  # not sure if necessary.  Files are ~1.0mb-2.0mb
                               # this would be great for files 10mb-100mb
 #### Come back to this block for CapsTHREE if still using TF
 """
-# limit gpu mem usage to 33%
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.333)
-sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+# limit gpu mem usage to 3gb
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+  try:
+    tf.config.experimental.set_virtual_device_configuration(
+        gpus[0],
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=3072)])
+    logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+    print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+  except RuntimeError as e:
+    # Virtual devices must be set before GPUs have been initialized
+    print(e)
+)
 
 # DATA LOADER
 # for initial testing, using the greybox images
@@ -37,7 +48,7 @@ data_dir = pathlib.Path('../data/img/screenshots/train/cropped/')
 # Set up classes
 dominus = list(data_dir.glob('dominus/*'))
 fennec = list(data_dir.glob('fennec/*'))
-octane = list(data_dir.glob('octane/*')))
+octane = list(data_dir.glob('octane/*'))
 
 # LOADER PARAMETERS
 batch_size = 32
