@@ -27,25 +27,17 @@ dataset = dataset.prefetch()  # not sure if necessary.  Files are ~1.0mb-2.0mb
                               # this would be great for files 10mb-100mb
 #### Come back to this block for CapsTHREE if still using TF
 """
-'''
-# DATA LOADER
-# TODO: set up Data directory files to have dominus, fennec, 
-#       and octane as the top level
-data_dir = pathlib.Path('../data/img/')
-
-# Set up classes
-dominus = list(data_dir.glob('dominus/*'))
-fennec = list(data_dir.glob('fennec/*'))
-octane = list(data_dir.glob('octane/*'))
-'''
+# limit gpu mem usage to 33%
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.333)
+sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 # DATA LOADER
 # for initial testing, using the greybox images
-data_dir = pathlib.Path('../data/img/screenshots/grey_env/')
-# Set up 3 classes
-dominus = list(data_dir.glob('dom/*'))
-fennec = list(data_dir.glob('fen/*'))
-octane = list(data_dir.glob('oct/*'))
+data_dir = pathlib.Path('../data/img/screenshots/train/cropped/')
+# Set up classes
+dominus = list(data_dir.glob('dominus/*'))
+fennec = list(data_dir.glob('fennec/*'))
+octane = list(data_dir.glob('octane/*')))
 
 # LOADER PARAMETERS
 batch_size = 32
