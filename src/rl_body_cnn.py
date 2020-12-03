@@ -40,7 +40,7 @@ if gpus:
   except RuntimeError as e:
     # Virtual devices must be set before GPUs have been initialized
     print(e)
-)
+
 
 # DATA LOADER
 # for initial testing, using the greybox images
