@@ -131,5 +131,8 @@ dmypy.json
 # Data (too big to upload)
 data/img/
 
+# Models (not necessary to hold all)
+models/tf/
+
 # VSC settings
 .vscode/
