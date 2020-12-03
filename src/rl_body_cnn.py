@@ -136,4 +136,4 @@ for dense_layer in dense_layers:
             )
 
             # Save entire model in HDF5 format
-            model.save(f'../models/tf/model{int(time.time())}.h5')
+            model.save(f'../models/tf/model{NAME}.h5')
