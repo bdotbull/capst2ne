@@ -103,24 +103,25 @@ def plot_digit_weights(ax, weight, digit, img_height, img_width):
     ax.imshow(digit_weigths, cmap=plt.cm.winter, interpolation="nearest") 
 
 def viz_filters(model):
-    #Iterate thru all the layers of the model
+    #plt.figure(figsize=(5,5))
     for layer in model.layers:
         if 'conv' in layer.name:
             weights, bias= layer.get_weights()
-            print(layer.name, filters.shape)
-            
+            print(layer.name, weights.shape)
             #normalize filter values between  0 and 1 for visualization
             f_min, f_max = weights.min(), weights.max()
             filters = (weights - f_min) / (f_max - f_min)  
-            print(filters.shape[3])
+            print(weights.shape[3])
             filter_cnt=1
-            
             #plotting all the filters
             for i in range(filters.shape[3]):
+            #for i in range(6):
                 #get the filters
                 filt=filters[:,:,:, i]
-                #plotting each of the channel, color image RGB channels
+                #plotting ecah channel
                 for j in range(filters.shape[0]):
+                    #plt.figure( figsize=(5, 5) )
+                    #f = plt.figure(figsize=(10,10))
                     ax= plt.subplot(filters.shape[3], filters.shape[0], filter_cnt  )
                     ax.set_xticks([])
                     ax.set_yticks([])
