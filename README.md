@@ -1,6 +1,6 @@
 # Rocket League Image Classifier
 #
-A simple CNN which takes a screenshot from Rocket League as input and outputs the name of the car the player is using. Trained on the three most popular bodies used in competitive play:
+A simple CNN which takes a screenshot from Rocket League as input and outputs the name of the car the player is using. The network was trained in a test environment on the three most popular bodies used in competitive play:
 - Dominus
 - Fennec
 - Octane
